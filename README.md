@@ -15,7 +15,7 @@ I obtained the Debian package of snapd 2.32 from https://launchpad.net/ubuntu/+s
 
 #
 
-First, I check the Ubuntu Machine if it is vulnerable to exploitation by using the commands _cat /etc/lsb-release_ (Showing the Ubuntu version with its description) and _uname -a_ (Checking the information on the current computer and operating system). Then, we are sure that this machine is exploitable. 
+First, I check the Ubuntu Machine to see if it is vulnerable to exploitation by using the commands _cat /etc/lsb-release_ (Which Shows the Ubuntu version with its description) and _uname -a_ (Which Checks the information on the current computer and operating system). Then, we are sure that this machine is exploitable. 
 
 ![image](https://github.com/user-attachments/assets/638a0b06-0d8b-4b6f-8536-c87fd113f1ad)
 
@@ -27,11 +27,35 @@ The next step is to start the snapd service by using the command _systemctl star
 
 #
 
-Next, I will check the user's privileges by using the commands _id_ (Displaying the user and group information) and _tail /etc/passwd_ (The _/etc/passwd_ file is used to keep track of every registered user). The results below show that the attacker with the "coby" username is a normal user, which has the lowest access to system.
+Next, I will check the user's privileges by using the commands _id_ (Displaying the user and group information) and _tail /etc/passwd_ (The _/etc/passwd_ file is used to keep track of every registered user). The results below show that the attacker with the "coby" username is a normal user, who has the lowest access to the system.
 
 ![image](https://github.com/user-attachments/assets/14e8942d-809f-4d42-b651-a2bed2ca0d1a)
 
 #
 
 ## Exploitation:
+
+To launch this attack, we will utilize the **dirty_sock** script, having two versions, and obtained from https://github.com/initstring/dirty_sock. While Version One requires an outbound Internet connection and running the SSH service, Version Two can be run directly without any requirements.
+
+In the _dirty_sockv2.py_, which will be used in this exploitation, some key components should be focused on. The first key component in this script is the variable _TROJAN_SNAP_, which is a base64-encoded string representing an installable snap package. This package is an empty "devmode" snap that has a bash script in the install hook, which will create a new user ("devmode" (developer mode) is a special installation mode that allows snaps to bypass strict confinement for development and debugging purposes).
+
+![image](https://github.com/user-attachments/assets/dd9fd0b1-bc26-4c98-9e58-c528d6d91ffa)
+
+#
+
+Another considerable component in this script is the _create_sockfile()_ function. This function exploits the insecure parsing in "snapd's ucrednet.go" file to generate a random socket file and slip the dirty sock, _;uid=0;_, allowing us to overwrite the UID variable.
+
+![image](https://github.com/user-attachments/assets/ba8daea4-a6e0-48b7-bda4-9bfde0e66012)
+
+#
+
+To implement this exploitation, I simply execute the _dirty_sockv2.py_ in the terminal. After successfully running the dirty_sock exploit, we can see that dirty_sock with the same password account was created automatically by the script. 
+
+![image](https://github.com/user-attachments/assets/4ccb9e05-e744-4450-b5a7-eaca30d117e9)
+
+#
+
+Then, I check the _/etc/passwd_ to see the list of registered users, and see a new user called "dirty_sock" was created.
+
+![image](https://github.com/user-attachments/assets/b3913b56-6d06-4957-8680-8050d25b389c)
 
