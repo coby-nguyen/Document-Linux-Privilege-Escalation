@@ -1,4 +1,5 @@
 # Linux Privilege Escalation (via snapd)
+
 ## Project Goal: 
 Exploiting the vulnerability called "Dirty_Sock" (CVE-2019-7304) in the REST API for Canonical's snapd daemon (a default service in Ubuntu Linux), to gain root access.
 
@@ -30,8 +31,6 @@ The next step is to start the snapd service by using the command _systemctl star
 Next, I will check the user's privileges by using the commands _id_ (Displaying the user and group information) and _tail /etc/passwd_ (The _/etc/passwd_ file is used to keep track of every registered user). The results below show that the attacker with the "coby" username is a normal user, who has the lowest access to the system.
 
 ![image](https://github.com/user-attachments/assets/14e8942d-809f-4d42-b651-a2bed2ca0d1a)
-
-#
 
 ## Exploitation:
 
