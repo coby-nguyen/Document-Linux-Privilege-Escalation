@@ -49,7 +49,7 @@ Another considerable component in this script is the _create_sockfile()_ functio
 
 #
 
-To implement this exploitation, I simply execute the _dirty_sockv2.py_ in the terminal. After successfully running the dirty_sock exploit, we can see that dirty_sock with the same password account was created automatically by the script. 
+To implement this exploitation, I simply execute the _dirty_sockv2.py_ in the terminal. After successfully running the dirty_sock exploit, we can see that a dirty_sock account with the same password was automatically created by the script. 
 
 ![image](https://github.com/user-attachments/assets/4ccb9e05-e744-4450-b5a7-eaca30d117e9)
 
@@ -59,3 +59,11 @@ Then, I check the _/etc/passwd_ to see the list of registered users, and see a n
 
 ![image](https://github.com/user-attachments/assets/b3913b56-6d06-4957-8680-8050d25b389c)
 
+#
+
+By using the _su_ command, I can log into the "dirty_sock" account using the discovered credentials. After successfully logging in, I can check the privileges of this user and see that it is in the **sudo** group. This means the attacker has already gained full control of the system and can do anything with the highest privileges.
+
+![image](https://github.com/user-attachments/assets/e202d9a9-aae1-43ff-a380-4719cc8ebbab)
+
+## Conclusion:
+The CVSS score of this vulnerability is 8.8 (High Severity), meaning it can cause a huge impact on the system if it is exploited. This vulnerability has a high severity, since it doesn't require a high privilege to exploit. When an attacker already has some foothold on the system (e.g., a low-privilege user), they can escalate privileges to root, making this vulnerability a serious local security threat, especially in multi-user or cloud environments.
